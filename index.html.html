@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academia – O Nosso Menu</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #D94056;
+    --dark: #1A1A1A;
+    --mid: #3A3A3A;
+    --light: #F7F7F7;
+    --muted: #888;
+    --border: #E5E5E5;
+    --white: #FFFFFF;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--white);
+    border-bottom: 3px solid var(--red);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .logo-wrap img {
+    height: 56px;
+    width: auto;
+  }
+
+  .header-text h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.5px;
+  }
+
+  .header-text p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* NAV TABS */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 16px;
+    gap: 4px;
+    position: sticky;
+    top: 99px;
+    z-index: 99;
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  nav button {
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+
+  nav button.active {
+    color: var(--red);
+    border-bottom-color: var(--red);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: var(--red);
+    border-radius: 2px;
+  }
+
+  /* CATEGORY */
+  .category {
+    margin-bottom: 28px;
+  }
+
+  .category-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  /* ITEM ROW */
+  .item {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .item:hover {
+    border-color: var(--red);
+    box-shadow: 0 2px 8px rgba(217,64,86,0.08);
+  }
+
+  .item-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.3;
+  }
+
+  .item-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .price-block {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .price {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red);
+    white-space: nowrap;
+  }
+
+  .price-sm {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .price-badge {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    display: inline-block;
+    margin-top: 3px;
+  }
+
+  /* TWO PRICES (Média / Grande) */
+  .dual-price {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .dual-price span {
+    text-align: center;
+  }
+
+  .dual-price .label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    display: block;
+  }
+
+  .dual-price .val {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--red);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: #ccc;
+    text-align: center;
+    padding: 20px 16px;
+    font-size: 12px;
+  }
+
+  footer strong { color: var(--white); }
+
+  @media (max-width: 480px) {
+    header { padding: 14px 16px; gap: 12px; }
+    .logo-wrap img { height: 44px; }
+    .header-text h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <!-- Logo inline SVG como fallback, mas o ideal é a imagem real -->
+    <svg width="56" height="56" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- M shape -->
+      <rect x="20" y="20" width="30" height="90" rx="15" fill="#D94056"/>
+      <rect x="85" y="20" width="30" height="90" rx="15" fill="#D94056"/>
+      <rect x="50" y="50" width="35" height="60" rx="8" fill="#D94056"/>
+      <!-- oryx silhouette simplified -->
+      <ellipse cx="150" cy="55" rx="28" ry="22" fill="#D94056" opacity="0.85"/>
+      <line x1="158" y1="35" x2="165" y2="15" stroke="#D94056" stroke-width="4" stroke-linecap="round"/>
+      <line x1="163" y1="33" x2="172" y2="14" stroke="#D94056" stroke-width="4" stroke-linecap="round"/>
+      <!-- Text -->
+      <text x="100" y="140" font-family="Arial Black" font-size="22" font-weight="900" text-anchor="middle" fill="#1A1A1A">ACADEMIA</text>
+      <text x="100" y="158" font-family="Arial" font-size="11" text-anchor="middle" fill="#D94056">★★ 2024 ★★</text>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>O Nosso Menu</h1>
+    <p>Abertos Seg–Sex 7h30–20h00 · Sáb e Feriados 7h30–13h00</p>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="show('pizza', this)">🍕 Pizza</button>
+  <button onclick="show('sandes', this)">🥪 Sandes & Tostas</button>
+  <button onclick="show('almoco', this)">🍽️ Almoços</button>
+  <button onclick="show('bar', this)">🍺 Bar</button>
+  <button onclick="show('bebquentes', this)">☕ Beb. Quentes</button>
+  <button onclick="show('sumos', this)">🥤 Sumos</button>
+</nav>
+
+<main>
+
+  <!-- PIZZA -->
+  <div id="pizza" class="section active">
+    <div class="section-title">Pizza</div>
+    <div class="category">
+      <div class="category-label">Pizzas</div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Barbecue</div>
+          <div class="item-desc">Molho, tomate, queijo, frango, cebola, milho</div>
+        </div>
+        <div class="price-block">
+          <div class="dual-price">
+            <span><span class="label">Média</span><span class="val">6.000</span></span>
+            <span><span class="label">Grande</span><span class="val">9.000</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Chouriço ou Fiambre</div>
+          <div class="item-desc">Molho, tomate, queijo, chouriço ou fiambre, orégãos</div>
+        </div>
+        <div class="price-block">
+          <div class="dual-price">
+            <span><span class="label">Média</span><span class="val">6.000</span></span>
+            <span><span class="label">Grande</span><span class="val">9.000</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Atum</div>
+          <div class="item-desc">Molho, tomate, queijo, atum ou fiambre, azeitonas, orégãos</div>
+        </div>
+        <div class="price-block">
+          <div class="dual-price">
+            <span><span class="label">Média</span><span class="val">6.000</span></span>
+            <span><span class="label">Grande</span><span class="val">9.000</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">4 Estações</div>
+          <div class="item-desc">Molho, tomate, queijo, cebola, fruta, azeitonas, tomate, fiambre, cogumelos, tomate, orégãos</div>
+        </div>
+        <div class="price-block">
+          <div class="dual-price">
+            <span><span class="label">Média</span><span class="val">6.000</span></span>
+            <span><span class="label">Grande</span><span class="val">9.000</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Havaiana</div>
+          <div class="item-desc">Molho, tomate, queijo, fiambre, ananás, azeitonas, cebola, pimenta, orégãos</div>
+        </div>
+        <div class="price-block">
+          <div class="dual-price">
+            <span><span class="label">Média</span><span class="val">6.000</span></span>
+            <span><span class="label">Grande</span><span class="val">9.000</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Frutos do Mar</div>
+          <div class="item-desc">Molho, tomate, queijo, camarão, azeite, pimenta, orégãos</div>
+        </div>
+        <div class="price-block">
+          <div class="dual-price">
+            <span><span class="label">Média</span><span class="val">6.000</span></span>
+            <span><span class="label">Grande</span><span class="val">9.000</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SANDES & TOSTAS -->
+  <div id="sandes" class="section">
+    <div class="section-title">Sandes & Tostas</div>
+
+    <div class="category">
+      <div class="category-label">Tostas</div>
+      <div class="item"><div><div class="item-name">Tosta Queijo / Fiambre</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Tosta Mista / Atum / Frango</div></div><div class="price-block"><div class="price">3.500</div></div></div>
+      <div class="item"><div><div class="item-name">Torrada + Manteiga</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Hambúrgueres</div>
+      <div class="item"><div><div class="item-name">Hambúrguer Carne</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Hambúrguer Carne + Batata</div></div><div class="price-block"><div class="price">4.500</div></div></div>
+      <div class="item"><div><div class="item-name">Hambúrguer Carne + Batata + Bebida</div></div><div class="price-block"><div class="price">5.000</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Cachorros & Prego</div>
+      <div class="item"><div><div class="item-name">Cachorro-Quente</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Cachorro-Quente + Bebida</div></div><div class="price-block"><div class="price">3.000</div></div></div>
+      <div class="item"><div><div class="item-name">Prego no Pão + Batata</div></div><div class="price-block"><div class="price">7.000</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Fajitas</div>
+      <div class="item"><div><div class="item-name">Fajita Frango</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Fajita Frango + Batata</div></div><div class="price-block"><div class="price">4.500</div></div></div>
+      <div class="item"><div><div class="item-name">Fajita Frango + Batata + Bebida</div></div><div class="price-block"><div class="price">5.000</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Pastelaria, Omeletes & Saladas</div>
+      <div class="item"><div><div class="item-name">Pastelaria Doce</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+      <div class="item"><div><div class="item-name">Omelete Simples</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Omelete Queijo / Fiambre / Chouriço</div></div><div class="price-block"><div class="price">3.500</div></div></div>
+      <div class="item"><div><div class="item-name">Omelete Mista</div></div><div class="price-block"><div class="price">4.000</div></div></div>
+      <div class="item"><div><div class="item-name">Salada Atum / Frango</div></div><div class="price-block"><div class="price">5.500</div></div></div>
+      <div class="item"><div><div class="item-name">Salada Mista ou Tomate</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+    </div>
+  </div>
+
+  <!-- ALMOÇOS -->
+  <div id="almoco" class="section">
+    <div class="section-title">Almoços</div>
+
+    <div class="category">
+      <div class="category-label">Refeições Rápidas</div>
+      <div class="item"><div><div class="item-name">Bitoque Carne</div></div><div class="price-block"><div class="price">11.000</div></div></div>
+      <div class="item"><div><div class="item-name">Bitoque Frango</div></div><div class="price-block"><div class="price">10.000</div></div></div>
+      <div class="item"><div><div class="item-name">Prego no Prato</div></div><div class="price-block"><div class="price">9.500</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Sopas & Aperitivos</div>
+      <div class="item"><div><div class="item-name">Sopa do dia + Pão</div></div><div class="price-block"><div class="price">2.000</div></div></div>
+      <div class="item"><div><div class="item-name">Frango Passarinho</div></div><div class="price-block"><div class="price">4.500</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Take Away</div>
+      <div class="item"><div><div class="item-name">Take Away G</div></div><div class="price-block"><div class="price">800</div></div></div>
+      <div class="item"><div><div class="item-name">Take Away P</div></div><div class="price-block"><div class="price">500</div></div></div>
+      <div class="item"><div><div class="item-name">Take Away Pizza</div></div><div class="price-block"><div class="price">800</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Guarnições</div>
+      <div class="item"><div><div class="item-name">Arroz</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+      <div class="item"><div><div class="item-name">Batata Frita</div></div><div class="price-block"><div class="price">2.000</div></div></div>
+      <div class="item"><div><div class="item-name">Legumes Salteados</div></div><div class="price-block"><div class="price">2.000</div></div></div>
+      <div class="item"><div><div class="item-name">Ovo Estrelado</div></div><div class="price-block"><div class="price">500</div></div></div>
+      <div class="item"><div><div class="item-name">Ketchup / Mayonese</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+      <div class="item"><div><div class="item-name">Pizza Ingredientes Extra</div><div class="item-desc">Queijo, fiambre, ananás, cogumelos, chouriço, cebola, ovo, milho, azeitonas, pimentos, frango, camarão, bacon</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Sobremesas</div>
+      <div class="item"><div><div class="item-name">Bolo da Casa (fatia)</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+      <div class="item"><div><div class="item-name">Churros</div></div><div class="price-block"><div class="price">1.500</div></div></div>
+      <div class="item"><div><div class="item-name">Gelado Magnum</div></div><div class="price-block"><div class="price">3.500</div></div></div>
+      <div class="item"><div><div class="item-name">Gelado Cornetto</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Gelado Paddle Pop</div></div><div class="price-block"><div class="price">2.400</div></div></div>
+      <div class="item"><div><div class="item-name">Gelado Choc Copo</div></div><div class="price-block"><div class="price">2.800</div></div></div>
+    </div>
+  </div>
+
+  <!-- BAR -->
+  <div id="bar" class="section">
+    <div class="section-title">O Nosso Bar</div>
+
+    <div class="category">
+      <div class="category-label">Bebidas Sem Álcool</div>
+      <div class="item"><div><div class="item-name">Água Pequena</div></div><div class="price-block"><div class="price">300</div></div></div>
+      <div class="item"><div><div class="item-name">Água Grande</div></div><div class="price-block"><div class="price">700</div></div></div>
+      <div class="item"><div><div class="item-name">Minute Maid</div></div><div class="price-block"><div class="price">800</div></div></div>
+      <div class="item"><div><div class="item-name">Sumo Pacote Pequeno</div></div><div class="price-block"><div class="price">2.500</div></div></div>
+      <div class="item"><div><div class="item-name">Bebida Gás (lata)</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+      <div class="item"><div><div class="item-name">Gingerei</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+      <div class="item"><div><div class="item-name">Água Tónica</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Bebidas Com Álcool</div>
+      <div class="item"><div><div class="item-name">Cerveja Lata</div></div><div class="price-block"><div class="price">730</div></div></div>
+      <div class="item"><div><div class="item-name">Cerveja Garrafa</div></div><div class="price-block"><div class="price">500</div></div></div>
+      <div class="item"><div><div class="item-name">Lambreta</div></div><div class="price-block"><div class="price">600</div></div></div>
+      <div class="item"><div><div class="item-name">Smirnoff / Booster</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+      <div class="item"><div><div class="item-name">Vinho Copo</div></div><div class="price-block"><div class="price">3.500</div></div></div>
+      <div class="item"><div><div class="item-name">Licor Besl / Amarula</div></div><div class="price-block"><div class="price">2.000</div></div></div>
+      <div class="item"><div><div class="item-name">Whisky</div></div><div class="price-block"><div class="price">3.000</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Cocktails</div>
+      <div class="item"><div><div class="item-name">Caipirinha</div></div><div class="price-block"><div class="price">3.000</div></div></div>
+      <div class="item"><div><div class="item-name">Gin</div></div><div class="price-block"><div class="price">3.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- BEBIDAS QUENTES -->
+  <div id="bebquentes" class="section">
+    <div class="section-title">Bebidas Quentes</div>
+    <div class="category">
+      <div class="item"><div><div class="item-name">Café</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+      <div class="item"><div><div class="item-name">Descafeinado</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+      <div class="item"><div><div class="item-name">Café Americano</div></div><div class="price-block"><div class="price">1.100</div></div></div>
+      <div class="item"><div><div class="item-name">Meia Leite</div></div><div class="price-block"><div class="price">1.100</div></div></div>
+      <div class="item"><div><div class="item-name">Galão</div></div><div class="price-block"><div class="price">1.900</div></div></div>
+      <div class="item"><div><div class="item-name">Leite Chocolate</div></div><div class="price-block"><div class="price">2.000</div></div></div>
+      <div class="item"><div><div class="item-name">Copo Leite</div></div><div class="price-block"><div class="price">1.200</div></div></div>
+      <div class="item"><div><div class="item-name">Chá</div></div><div class="price-block"><div class="price">1.000</div></div></div>
+    </div>
+  </div>
+
+  <!-- SUMOS & BATIDOS -->
+  <div id="sumos" class="section">
+    <div class="section-title">Sumos & Batidos</div>
+
+    <div class="category">
+      <div class="category-label">Batidos de Fruta Natural</div>
+      <div class="item"><div><div class="item-name">Ananás</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Mamão / Papaia</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Manga</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Maracujá</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Abacate</div></div><div class="price-block"><div class="price">—</div></div></div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Sumos de Fruta Natural</div>
+      <div class="item"><div><div class="item-name">Limonada</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Ananás</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Ananás com Pitaia</div></div><div class="price-block"><div class="price">—</div></div></div>
+      <div class="item"><div><div class="item-name">Maracujá</div></div><div class="price-block"><div class="price">—</div></div></div>
+    </div>
+    <p style="font-size:12px;color:#888;margin-top:8px;">* Preços dos batidos e sumos não visíveis no menu. Confirme no balcão.</p>
+  </div>
+
+</main>
+
+<footer>
+  <strong>Academia</strong> · Abertos Seg–Sex 7h30–20h00 · Sáb e Feriados 7h30–13h00
+</footer>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+</script>
+
+</body>
+</html>
